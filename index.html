@@ -30,7 +30,6 @@ nav::after{content:'';position:absolute;bottom:0;left:48px;right:48px;height:1px
 .nav-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .3s;position:relative}
 .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--cream);transition:width .3s ease}
 .nav-links a:hover{color:var(--cream)}.nav-links a:hover::after{width:100%}
-.nav-logo{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.3em;color:var(--cream-dim);text-transform:uppercase}
 .nav-cart{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--cream-dim);text-decoration:none;transition:color .3s}
 .nav-cart:hover{color:var(--cream)}
 
@@ -91,9 +90,11 @@ nav::after{content:'';position:absolute;bottom:0;left:48px;right:48px;height:1px
   color:rgba(212,205,176,.6);text-shadow:0 0 10px rgba(212,205,176,.35);
   animation:tcFlicker .08s steps(1) infinite}
 @keyframes tcFlicker{0%,82%,100%{opacity:1}85%{opacity:.65}91%{opacity:1}95%{opacity:.4}}
-.tc-top-left{top:22px;left:26px}
-.tc-top-right{top:22px;right:26px;display:flex;align-items:center;gap:8px}
-.tc-top-right::before{content:'';width:7px;height:7px;border-radius:50%;background:rgba(210,50,50,.9);box-shadow:0 0 10px rgba(210,50,50,.6);animation:recBlink 2s ease-in-out infinite;display:inline-block}
+
+/* Repositioned cam UI elements to avoid nav overlap */
+.tc-timecode{top:52px;left:26px;display:flex;align-items:center;gap:8px}
+.tc-rec{top:52px;right:26px;display:flex;align-items:center;gap:8px}
+.tc-rec::before{content:'';width:7px;height:7px;border-radius:50%;background:rgba(210,50,50,.9);box-shadow:0 0 10px rgba(210,50,50,.6);animation:recBlink 2s ease-in-out infinite;display:inline-block}
 @keyframes recBlink{0%,100%{opacity:1}50%{opacity:.1}}
 .tc-bottom-left{bottom:26px;left:26px;font-size:9px;color:rgba(212,205,176,.38)}
 .tc-bottom-right{bottom:26px;right:26px;font-size:9px;color:rgba(212,205,176,.38)}
@@ -102,7 +103,13 @@ nav::after{content:'';position:absolute;bottom:0;left:48px;right:48px;height:1px
 .hero-content{position:relative;z-index:20;display:flex;flex-direction:column;align-items:center;text-align:center}
 .hero-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(212,205,176,.55);margin-bottom:48px;opacity:0;animation:fadeUp 1.2s .3s forwards}
 .hero-logo{width:min(860px,86vw);opacity:0;animation:fadeIn 1.8s .1s forwards;filter:drop-shadow(0 0 60px rgba(212,205,176,.14)) drop-shadow(0 0 140px rgba(212,205,176,.06))}
-.hero-sub{margin-top:50px;font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(212,205,176,.65);letter-spacing:.08em;line-height:1.85;opacity:0;animation:fadeUp 1.2s .8s forwards;max-width:400px}
+.hero-sub{margin-top:50px;font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(14px,2vw,18px);color:rgba(212,205,176,.65);letter-spacing:.08em;line-height:1.85;opacity:0;animation:fadeUp 1.2s .8s forwards,subFlicker 3.5s 2s steps(1) infinite;max-width:400px}
+@keyframes subFlicker{
+  0%,100%{opacity:1}
+  4%{opacity:.15}6%{opacity:.95}8%{opacity:.0}10%{opacity:1}
+  52%{opacity:1}53%{opacity:.2}54%{opacity:.9}55%{opacity:.1}56%{opacity:1}
+  88%{opacity:1}89%{opacity:.3}90%{opacity:1}
+}
 .hero-cta{margin-top:50px;opacity:0;animation:fadeUp 1.2s 1.1s forwards;display:flex;gap:24px;align-items:center}
 
 .btn-primary{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--black);background:var(--cream);padding:14px 36px;text-decoration:none;position:relative;overflow:hidden;transition:color .3s}
@@ -231,6 +238,8 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
   .stat-row{grid-template-columns:1fr}.stat-item{border-right:none;border-bottom:1px solid rgba(212,205,176,.06);padding:40px 24px}
   .products-header{padding:0 24px 48px;flex-direction:column;align-items:flex-start;gap:24px}
   .timecode{font-size:9px}
+  .tc-timecode{top:44px;left:16px}
+  .tc-rec{top:44px;right:16px}
 }
 </style>
 </head>
@@ -246,18 +255,13 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     <li><a href="#lookbook">Lookbook</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <span class="nav-logo">WITP — Est. 2024</span>
+  <span style="flex:1"></span>
   <a href="#" class="nav-cart">Bag (0)</a>
 </nav>
 
 <!-- ════ HERO ════ -->
 <div class="hero">
 
-  <!-- PROCEDURAL CAMCORDER CANVAS -->
-  <!-- To use real video instead: replace canvas with
-       <video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-        filter:grayscale(.5) contrast(1.2) brightness(.45) saturate(.55) sepia(.2)"
-        autoplay muted loop playsinline><source src="YOUR_VIDEO.mp4" type="video/mp4"></video> -->
   <canvas id="camcorderCanvas"></canvas>
 
   <!-- VHS EFFECT LAYERS -->
@@ -269,11 +273,11 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
   <div class="vhs-vignette"></div>
   <div class="hero-overlay"></div>
 
-  <!-- CAMCORDER UI OVERLAYS -->
+  <!-- CAMCORDER UI OVERLAYS — repositioned below nav -->
   <div class="cam-ui">
-    <div class="timecode tc-top-left" id="tcDisplay">00:00:00</div>
-    <div class="timecode tc-top-right">REC</div>
-    <div class="timecode tc-bottom-left">FOREST PARK · QUEENS NY · SP</div>
+    <div class="timecode tc-timecode" id="tcDisplay">00:00:00</div>
+    <div class="timecode tc-rec">REC</div>
+    <div class="timecode tc-bottom-left">QUEENS NY · SP</div>
     <div class="timecode tc-bottom-right">10:52 PM</div>
   </div>
 
@@ -283,7 +287,7 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     <img src="/mnt/user-data/uploads/1771704224396_image.png" alt="Walk in the Park" class="hero-logo"
       onerror="this.style.display='none';document.getElementById('lf').style.display='block'">
     <div id="lf" style="display:none;font-family:'IM Fell English',serif;font-size:clamp(48px,8vw,96px);text-align:center;color:var(--cream);opacity:0;animation:fadeIn 1.8s .1s forwards">Walk in the Park</div>
-    <p class="hero-sub">Clothing for those who move<br>through the night unnoticed.</p>
+    <p class="hero-sub">Nothing happens here.</p>
     <div class="hero-cta">
       <a href="#shop" class="btn-primary"><span>Shop Now</span></a>
       <a href="#lookbook" class="btn-ghost">View Lookbook</a>
@@ -402,18 +406,11 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
   </div>
   <div class="footer-bottom">
     <span>© 2024 Walk in the Park — All rights reserved</span>
-    <span>Forest Park, Queens, NY — 10:52 PM</span>
+    <span>Queens, NY — 10:52 PM</span>
   </div>
 </footer>
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   CAMCORDER CANVAS
-   Procedurally animated night park scene:
-   moon glow, organic tree silhouettes with noise,
-   lamp flicker, pavilion, floating particles, film grain.
-   Replace with a real <video> tag when you have footage.
-══════════════════════════════════════════════════════════ */
 (function(){
   const cv = document.getElementById('camcorderCanvas');
   const cx = cv.getContext('2d');
@@ -426,7 +423,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
   resize();
   window.addEventListener('resize', resize);
 
-  // Fast hash noise
   function hash(x,y){ return (Math.sin(x*127.1+y*311.7)*43758.5453)%1; }
   function smoothNoise(x,y){
     const ix=Math.floor(x), iy=Math.floor(y), fx=x-ix, fy=y-iy;
@@ -441,10 +437,8 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     return v/m;
   }
 
-  // Handheld sway state
   let sx=0,sy=0,svx=0,svy=0;
 
-  // Particles (dust motes / light debris)
   const particles = Array.from({length:28},()=>({
     x: Math.random()*1, y: Math.random()*0.6+0.3,
     vx:(Math.random()-.5)*0.0002, vy:-Math.random()*0.0004-0.0001,
@@ -455,7 +449,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     T += 0.007;
     cx.clearRect(0,0,W,H);
 
-    // Handheld sway (slow, organic)
     svx += (Math.sin(T*0.61+1.1)*0.55 - sx)*0.038;
     svy += (Math.sin(T*0.47+0.9)*0.45 - sy)*0.038;
     svx *= 0.91; svy *= 0.91;
@@ -464,7 +457,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.save();
     cx.translate(sx, sy);
 
-    // ── SKY ──
     const sky = cx.createLinearGradient(0,0,0,H*0.58);
     sky.addColorStop(0,   '#030504');
     sky.addColorStop(0.3, '#070b06');
@@ -473,9 +465,7 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.fillStyle = sky;
     cx.fillRect(-20,-20,W+40,H*0.62);
 
-    // ── MOON ATMOSPHERE ──
     const MX = W*0.62, MY = H*0.185;
-    // Wide atmospheric halo
     const halo1 = cx.createRadialGradient(MX,MY,0,MX,MY,W*0.32);
     halo1.addColorStop(0,  'rgba(195,185,148,0.18)');
     halo1.addColorStop(0.4,'rgba(165,158,122,0.08)');
@@ -483,7 +473,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.fillStyle = halo1;
     cx.beginPath(); cx.ellipse(MX,MY,W*0.32,W*0.32,0,0,Math.PI*2); cx.fill();
 
-    // Tighter glow
     const halo2 = cx.createRadialGradient(MX,MY,0,MX,MY,W*0.1);
     halo2.addColorStop(0,  'rgba(220,212,170,0.32)');
     halo2.addColorStop(0.5,'rgba(195,186,148,0.14)');
@@ -491,7 +480,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.fillStyle = halo2;
     cx.beginPath(); cx.ellipse(MX,MY,W*0.1,W*0.1,0,0,Math.PI*2); cx.fill();
 
-    // Moon disc
     const moonR = W*0.046;
     const mg = cx.createRadialGradient(MX-3,MY-3,0,MX,MY,moonR);
     mg.addColorStop(0,  '#e8e2c5');
@@ -499,13 +487,11 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     mg.addColorStop(1,  '#bcb494');
     cx.beginPath(); cx.arc(MX,MY,moonR,0,Math.PI*2);
     cx.fillStyle = mg; cx.fill();
-    // Subtle moon texture (craters)
     [[MX-14,MY-10,8],[MX+17,MY+11,5],[MX-5,MY+19,4],[MX+23,MY-20,7]].forEach(([cx2,cy2,r])=>{
       cx.beginPath(); cx.arc(cx2,cy2,r,0,Math.PI*2);
       cx.fillStyle='rgba(170,162,128,0.38)'; cx.fill();
     });
 
-    // ── FAINT CITY SKYLINE ──
     cx.save(); cx.globalAlpha=0.16;
     cx.fillStyle='#8aaa78';
     [[.32,.245,.012,.09],[.335,.225,.009,.11],[.342,.235,.016,.095],
@@ -516,12 +502,10 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.beginPath(); cx.moveTo(.384*W,.208*H); cx.lineTo(.389*W,.152*H); cx.lineTo(.394*W,.208*H); cx.fill();
     cx.restore();
 
-    // ── GROUND ──
     const grd = cx.createLinearGradient(0,H*.5,0,H);
     grd.addColorStop(0,'#0c1008'); grd.addColorStop(.5,'#090d06'); grd.addColorStop(1,'#050706');
     cx.fillStyle=grd; cx.fillRect(-20,H*.5,W+40,H*.55);
 
-    // ── PATH ──
     cx.save();
     const pg = cx.createLinearGradient(0,H*.52,0,H);
     pg.addColorStop(0,'rgba(115,128,88,0.58)'); pg.addColorStop(1,'rgba(75,84,56,0.28)');
@@ -532,13 +516,11 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     cx.bezierCurveTo(W*.41,H*.570, W*.435,H*.575, W*.465,H*.595);
     cx.lineTo(W*.56,H); cx.closePath();
     cx.fill();
-    // Left fork
     cx.beginPath();
     cx.moveTo(0,H); cx.lineTo(W*.06,H*.75); cx.lineTo(W*.2,H*.69); cx.lineTo(W*.31,H);
     cx.fillStyle='rgba(88,98,68,0.42)'; cx.fill();
     cx.restore();
 
-    // ── LAMP GLOWS ──
     const lamps=[
       {x:.162,y:.535,r:.1,s:1.0},
       {x:.758,y:.515,r:.09,s:.88},
@@ -555,12 +537,10 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
       lg.addColorStop(1,  'rgba(0,0,0,0)');
       cx.fillStyle=lg;
       cx.beginPath(); cx.ellipse(lx,ly-14,r*W,r*W*.85,0,0,Math.PI*2); cx.fill();
-      // Tiny bright core
       cx.beginPath(); cx.arc(lx,ly-18,3,0,Math.PI*2);
       cx.fillStyle=`rgba(240,220,120,${.8*flicker})`; cx.fill();
     });
 
-    // ── LAMP POSTS (structural) ──
     cx.strokeStyle='#3a4830'; cx.lineWidth=3;
     [[W*.162,H*.535,H*.19,1],[W*.758,H*.515,H*.185,-1],
      [W*.435,H*.572,H*.105,1],[W*.565,H*.560,H*.105,-1]].forEach(([lx,ly,h,d])=>{
@@ -570,34 +550,26 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
       cx.fillStyle='rgba(210,185,60,0.9)'; cx.fill();
     });
 
-    // ── PAVILION ──
     const PX=W*.42, PY=H*.596, PW=W*.3, PH=H*.148;
-    // Body
     const pavG=cx.createLinearGradient(PX-PW/2,PY-PH,PX+PW/2,PY);
     pavG.addColorStop(0,'#3d5230'); pavG.addColorStop(.4,'#304222'); pavG.addColorStop(1,'#202c18');
     cx.fillStyle=pavG; cx.fillRect(PX-PW/2,PY-PH,PW,PH);
-    // Stone grain bands
     cx.strokeStyle='rgba(25,35,18,0.5)'; cx.lineWidth=1;
     for(let gy=PY-PH; gy<PY; gy+=12){
       cx.beginPath(); cx.moveTo(PX-PW/2,gy); cx.lineTo(PX+PW/2,gy); cx.stroke();
     }
-    // Cornice
     [[-22,-2,'#495e36'],[-15,-16,'#3e5130'],[-8,-28,'#384a2a']].forEach(([e,yo,c])=>{
       cx.fillStyle=c; cx.fillRect(PX-PW/2+e,PY-PH+yo,PW-2*e,14);
     });
-    // Arch void + glow
     const AW=PW*.29, AH=PH*.76;
-    // Faint warm glow through arch
     const ag=cx.createRadialGradient(PX,PY-10,0,PX,PY-AH*.4,AW*.7);
     ag.addColorStop(0,'rgba(140,155,100,0.22)');
     ag.addColorStop(.6,'rgba(90,100,62,0.08)');
     ag.addColorStop(1,'rgba(0,0,0,0)');
     cx.fillStyle=ag; cx.fillRect(PX-PW*.6,PY-PH*.9,PW*1.2,PH*1.0);
-    // Arch dark
     cx.fillStyle='#09100a';
     cx.beginPath(); cx.rect(PX-AW/2,PY-AH,AW,AH); cx.fill();
     cx.beginPath(); cx.arc(PX,PY-AH,AW/2,Math.PI,0); cx.fill();
-    // Side arches
     const SW=PW*.145, SH=PH*.52;
     [-1,1].forEach(side=>{
       const sax=PX+side*PW*.32;
@@ -605,16 +577,13 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
       cx.beginPath(); cx.rect(sax-SW/2,PY-SH,SW,SH); cx.fill();
       cx.beginPath(); cx.arc(sax,PY-SH,SW/2,Math.PI,0); cx.fill();
     });
-    // Pillars
     cx.fillStyle='#425534';
     [-PW/2,-PW/2+PW*.24,PW/2-PW*.24-12,PW/2-12].forEach(ox=>{
       cx.fillRect(PX+ox,PY-PH-10,13,PH+12);
     });
-    // Cornice detail line
     cx.fillStyle='rgba(85,110,65,0.6)';
     cx.fillRect(PX-PW/2,PY-PH+10,PW,4);
 
-    // ── ORGANIC TREE SILHOUETTES (noise-sculpted) ──
     function treeMass(cxc,cyc,rx,ry,colors,timeOff){
       cx.save();
       cx.beginPath();
@@ -635,17 +604,14 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
       cx.fillStyle=tg; cx.fill(); cx.restore();
     }
 
-    // Left trees
     treeMass(W*-0.01,H*.295,W*.16,H*.17,['#1c2e14','#132110','#09100a'],T);
     treeMass(W*0.08, H*.240,W*.13,H*.15,['#172910','#0f1c0c','#080d07'],T+1.2);
     treeMass(W*0.04, H*.370,W*.12,H*.14,['#192b12','#101e0d','#070c06'],T+2.4);
     treeMass(W*-0.04,H*.440,W*.10,H*.12,['#142508','#0d1909','#060a05'],T+0.7);
-    // Hard left edge fade
     const lm=cx.createLinearGradient(0,0,W*.28,0);
     lm.addColorStop(0,'#050705'); lm.addColorStop(1,'rgba(5,7,5,0)');
     cx.fillStyle=lm; cx.fillRect(-20,0,W*.28+20,H);
 
-    // Right trees (mirror)
     treeMass(W*1.01,H*.295,W*.16,H*.17,['#1c2e14','#132110','#09100a'],T+.5);
     treeMass(W*0.92,H*.240,W*.13,H*.15,['#172910','#0f1c0c','#080d07'],T+1.7);
     treeMass(W*0.96,H*.370,W*.12,H*.14,['#192b12','#101e0d','#070c06'],T+2.9);
@@ -654,12 +620,10 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     rm.addColorStop(0,'#050705'); rm.addColorStop(1,'rgba(5,7,5,0)');
     cx.fillStyle=rm; cx.fillRect(W*.72,0,W*.32,H);
 
-    // ── FLOATING PARTICLES (dust / light motes) ──
     particles.forEach(p=>{
       p.x += p.vx + Math.sin(T*0.8+p.y*10)*0.00015;
       p.y += p.vy;
       if(p.y < -0.05){ p.y=1.05; p.x=Math.random(); }
-      // near lamps — slightly brighter
       const nearLamp = lamps.some(l=>Math.abs(p.x-l.x)<0.08&&Math.abs(p.y-l.y)<0.08);
       cx.beginPath();
       cx.arc(p.x*W, p.y*H, p.size*(nearLamp?1.6:1), 0, Math.PI*2);
@@ -667,8 +631,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
       cx.fill();
     });
 
-    // ── FILM GRAIN (per-pixel noise — the main analog feel) ──
-    // Sample at 2x2 blocks for performance
     const id=cx.getImageData(0,0,W,H);
     const da=id.data;
     for(let i=0;i<da.length;i+=4){
@@ -679,7 +641,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
     }
     cx.putImageData(id,0,0);
 
-    // Mild green color grade (night vision / old camcorder)
     cx.globalAlpha=0.08;
     cx.fillStyle='#0a1a06';
     cx.fillRect(0,0,W,H);
@@ -691,7 +652,6 @@ footer{border-top:1px solid rgba(212,205,176,.06);padding:60px 80px}
 
   draw();
 
-  // Timecode counter
   let s=0,m=0,h=0;
   const tcEl=document.getElementById('tcDisplay');
   setInterval(()=>{
